@@ -23,11 +23,9 @@ public class ifly extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
-        if ("start".equals(action)) {
+        if ("startListen".equals(action)) {
             // 获取activity和context --> cordova.getActivity()和cordova.getContext()
             Toast.makeText(cordova.getContext(), args.getString(0), Toast.LENGTH_SHORT).show();
-
-
             return true;
         }
 

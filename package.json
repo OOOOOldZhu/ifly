@@ -1,11 +1,19 @@
 {
   "name": "ifly",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "z",
   "license": "ISC",
-  "description": ""
+  "description": "识别",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OOOOOldZhu/ifly.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OOOOOldZhu/ifly/issues"
+  },
+  "homepage": "https://github.com/OOOOOldZhu/ifly#readme"
 }
