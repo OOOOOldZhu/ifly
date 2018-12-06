@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="ifly" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>ifly</name>
+    <js-module name="ifly" src="www/ifly.js">
+        <clobbers target="ifly" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="ifly">
+                <param name="android-package" value="com.microduino.mDesigner.ifly"/>
+            </feature>
+        </config-file>
+        <source-file src="src/android/ifly.java" target-dir="src/com/microduino/mDesigner" />
+    </platform>
+</plugin>
