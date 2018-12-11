@@ -215,4 +215,36 @@
             </string-array>
         </config-file>
     </platform>
+
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="ifly">
+                <param name="ios-package" value="CDVSpeech" />
+            </feature>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+            <string></string>
+        </config-file>
+
+        <header-file src="src/ios/CDVSpeech.h" />
+        <source-file src="src/ios/CDVSpeech.m" />
+
+        <framework src="AVFoundation.framework" />
+        <framework src="AddressBook.framework" />
+        <framework src="AudioToolbox.framework" />
+        <framework src="SystemConfiguration.framework" />
+        <framework src="QuartzCore.framework" />
+
+        <framework src="libz.tbd" />
+        <framework src="libc++.tbd" />
+        <framework src="UIKit.framework" />
+        <framework src="CoreGraphics.framework" />
+        <framework src="Foundation.framework" />
+        <framework src="CoreTelephony.framework" />
+        <framework src="CoreLocation.framework" />
+        <framework src="Contacts.framework" />
+
+        <framework src="src/ios/iflyMSC.framework" custom="true" />
+    </platform>
 </plugin>
