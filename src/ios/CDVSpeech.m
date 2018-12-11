@@ -30,18 +30,18 @@
 - (void)login:(CDVInvokedUrlCommand*)command
 {
     self.callbackId = command.callbackId;
-    
+
     self.appId = SPEECH_APP_ID;
-    
+
     NSString *initString = [[NSString alloc] initWithFormat:@"appid=%@",self.appId];
     [IFlySpeechUtility createUtility:initString];
 
 }
 
 #pragma mark - 语音录入
-- (void)startListening:(CDVInvokedUrlCommand*)command
+- (void)startListen:(CDVInvokedUrlCommand*)command
 {
-    NSLog(@"Speech :: startListening");
+    NSLog(@"Speech :: startListen");
     NSDictionary* options = [command.arguments objectAtIndex:0];
     //                                                 withDefault:[NSNull null]];
     //是否有UI弹窗
@@ -70,13 +70,13 @@
                 [self.recognizer setParameter:value forKey:key];
             }
         }
-        
+
         //判断当前是否正在听 若正在识别则先停止 再开始听
         if ([self.recognizer isListening]) {
             [self.recognizer stopListening];
         }
-            [self.recognizer startListening];
-        
+            [self.recognizer stopListening];
+
     }else{
         //初始化语音识别控件
         UIWindow *keyWindow =  [UIApplication sharedApplication].keyWindow;
@@ -92,9 +92,9 @@
     }
 }
 
-- (void)stopListening:(CDVInvokedUrlCommand*)command
+- (void)stopListen:(CDVInvokedUrlCommand*)command
 {
-    NSLog(@"Speech :: stopListening");
+    NSLog(@"Speech :: stopListen");
     [self.recognizer stopListening];
 }
 
@@ -117,14 +117,14 @@
     if (!self.synthesizer){
         self.synthesizer = [IFlySpeechSynthesizer sharedInstance];
         self.synthesizer.delegate = self;
-        
+
         [self.synthesizer setParameter:@"50" forKey:[IFlySpeechConstant SPEED]];//合成的语速,取值范围 0~100
         [self.synthesizer setParameter:@"80" forKey:[IFlySpeechConstant VOLUME]];//合成的音量;取值范围 0~100
         [self.synthesizer setParameter:@"vixr" forKey:[IFlySpeechConstant VOICE_NAME]];//发音人,默认为”xiaoyan”
-        
+
         [self.synthesizer setParameter:@"8000" forKey: [IFlySpeechConstant SAMPLE_RATE]];//音频采样率,目前支持的采样率有 16000 和 8000;
         [self.synthesizer setParameter:@"tts.pcm" forKey: [IFlySpeechConstant TTS_AUDIO_PATH]];
-        
+
         NSLog(@"Speech :: createSynthesizer");
     }
     if ((NSNull *)options != [NSNull null]) {
@@ -134,7 +134,7 @@
             [self.synthesizer setParameter:value forKey:key];
         }
     }
-    
+
     if ([self.synthesizer isSpeaking]) {
         [self.synthesizer stopSpeaking];
     }
@@ -173,7 +173,7 @@
      *  @param isLast      -[out] 是否最后一个结果
      */
     - (void)onResult:(NSArray *)resultArray isLast:(BOOL) isLast{
-        
+
             NSLog(@"Speech :: onResults - %@", resultArray);
             if (self.callbackId) {
                 NSMutableString *text = [[NSMutableString alloc] init];
@@ -182,11 +182,11 @@
                     [text appendFormat:@"%@",key];
                 }
                 NSLog(@"Recognize Result: %@",text);
-        
+
                 //        NSString * resultFromJson =  [ISRDataHelper stringFromJson:text];
                 //
                 //        NSLog(@"---------%@",resultFromJson);
-        
+
                 NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:@"SpeechResults",STR_EVENT,text,STR_RESULTS, nil];
                 CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:info];
                 [result setKeepCallbackAsBool:YES];
@@ -221,11 +221,11 @@
             [text appendFormat:@"%@",key];
         }
         NSLog(@"Recognize Result: %@",text);
-        
+
         //        NSString * resultFromJson =  [ISRDataHelper stringFromJson:text];
         //
         //        NSLog(@"---------%@",resultFromJson);
-        
+
         NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:@"SpeechResults",STR_EVENT,text,STR_RESULTS, nil];
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:info];
         [result setKeepCallbackAsBool:YES];
@@ -266,7 +266,7 @@
                 [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
             }
     }
-    
+
 
 #pragma mark IFlySpeechSynthesizerDelegate
 - (void) onCompleted:(IFlySpeechError*)error

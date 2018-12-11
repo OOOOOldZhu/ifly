@@ -15,7 +15,7 @@
 
 
 @interface CDVSpeech : CDVPlugin <IFlySpeechRecognizerDelegate,IFlySpeechSynthesizerDelegate,IFlyRecognizerViewDelegate>{
-    
+
 }
 @property (nonatomic, copy) NSString* appId;
 @property (nonatomic, strong) NSString* callbackId;
@@ -24,9 +24,9 @@
 @property(nonatomic,strong) IFlyRecognizerView      *iflyRecognizerView;
 
 
-- (void)startListening:(CDVInvokedUrlCommand*)command;
-- (void)stopListening:(CDVInvokedUrlCommand*)command;
-- (void)cancelListening:(CDVInvokedUrlCommand*)command;
+- (void)startListen:(CDVInvokedUrlCommand*)command;
+- (void)stopListen:(CDVInvokedUrlCommand*)command;
+- (void)cancelListen:(CDVInvokedUrlCommand*)command;
 
 - (void)startSpeaking:(CDVInvokedUrlCommand*)command;
 - (void)pauseSpeaking:(CDVInvokedUrlCommand*)command;
