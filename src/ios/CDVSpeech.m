@@ -55,6 +55,7 @@
             self.recognizer = [IFlySpeechRecognizer sharedInstance];
             self.recognizer.delegate = self;
             [self.recognizer setParameter:@"iat" forKey:@"domain"];
+            [self.recognizer setParameter:[command.arguments objectAtIndex:2] forKey:@"language"];
             [self.recognizer setParameter:@"16000" forKey:@"sample_rate"];
             [self.recognizer setParameter:@"700" forKey:@"vad_eos"];
             [self.recognizer setParameter:@"0" forKey:@"plain_result"];
