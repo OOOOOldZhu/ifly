@@ -220,6 +220,7 @@
         <config-file parent="/*" target="config.xml">
             <feature name="ifly">
                 <param name="ios-package" value="CDVSpeech" />
+                <param name="onload" value="true" />
             </feature>
         </config-file>
 
@@ -229,6 +230,9 @@
 
         <header-file src="src/ios/CDVSpeech.h" />
         <source-file src="src/ios/CDVSpeech.m" />
+
+        <header-file src="src/ios/ISRDataHelper.h" />
+        <source-file src="src/ios/ISRDataHelper.m" />
 
         <framework src="AVFoundation.framework" />
         <framework src="AddressBook.framework" />
