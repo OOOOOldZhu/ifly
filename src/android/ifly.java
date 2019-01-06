@@ -5,11 +5,13 @@ import org.apache.cordova.CordovaPlugin;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -140,23 +142,27 @@ public class ifly extends CordovaPlugin {
             }
         }
     }
-    private void showDialog(){
-        if(dialog == null){
-            dialog = new Dialog(cordova.getActivity());
-//                LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.dialog_exit, null);
+
+    private void showDialog() {
+        if (dialog == null) {
+            dialog = new Dialog(cordova.getActivity(), R.style.VoiceDialog);
+            LayoutInflater inflater = LayoutInflater.from(cordova.getActivity());
+            View view = inflater.inflate(R.layout.layout_dialog_voiceinput, null);
+            dialog.setContentView(view);
         }
-        if(dialog != null){
-            if(dialog.isShowing())return;
+        if (dialog != null) {
+            if (dialog.isShowing()) return;
             dialog.show();
         }
 
     }
-    private  void dismissDialog(){
-        if(dialog != null && dialog.isShowing()){
+
+    private void dismissDialog() {
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
     }
+
     String result = "";
     private RecognizerListener mRecognizerListener = new RecognizerListener() {
         @Override
@@ -215,7 +221,7 @@ public class ifly extends CordovaPlugin {
                     Log.d(TAG, "onResult()最后一次 : " + results.getResultString());
                     speechRecognizer.stopListening();
                     callbackContext.success(result);
-                     //清空识别结果
+                    //清空识别结果
                     result = "";
                 }
             } catch (Exception e) {
