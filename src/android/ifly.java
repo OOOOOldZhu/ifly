@@ -135,7 +135,7 @@ public class ifly extends CordovaPlugin {
             }
         }
     }
-
+    String result = "";
     private RecognizerListener mRecognizerListener = new RecognizerListener() {
         @Override
         public void onBeginOfSpeech() {
@@ -181,8 +181,8 @@ public class ifly extends CordovaPlugin {
         public void onResult(RecognizerResult results, boolean isLast) {
             try {
                 String json = results.getResultString();
-                String text = JsonParser.parseIatResult(json);
-                if (text.equals(".") || text.equals("。") || text.equals("？") || text.equals("") || text.equals(" ") || text.equals("  ")) {
+                result += JsonParser.parseIatResult(json);
+                if (result.equals(".") || result.equals("。") || result.equals("？") || result.equals("") || result.equals(" ") || result.equals("  ")) {
                     return;
                 } else {
                     //respText += text;
@@ -190,7 +190,7 @@ public class ifly extends CordovaPlugin {
                 if (isLast) {
                     Log.d(TAG, "onResult()最后一次 : " + results.getResultString());
                     speechRecognizer.stopListening();
-                    callbackContext.success(text);
+                    callbackContext.success(result);
                 }
             } catch (Exception e) {
                 Log.i(TAG, "害羞小强返回结果的异常 : " + e);
