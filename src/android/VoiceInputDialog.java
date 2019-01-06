@@ -4,6 +4,7 @@ package com.microduino.mDesigner;
  * Created by z on 2017/9/14.
  */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,12 +18,12 @@ public class VoiceInputDialog {
     private Dialog dialog;
     private ImageView v1, v2, v3, v4, v5, v6;
     private Button cancelButton;
-    private Context context;
+    private Activity activity;
 
-    public VoiceInputDialog(Context context) {
-        this.context = context;
-        dialog = new Dialog(context, R.style.VoiceDialog);
-        LayoutInflater inflater = LayoutInflater.from(context);
+    public VoiceInputDialog(Activity activity) {
+        this.activity = activity;
+        dialog = new Dialog(activity, R.style.VoiceDialog);
+        LayoutInflater inflater = LayoutInflater.from(activity);
         View view = inflater.inflate(R.layout.layout_dialog_voiceinput, null);
         dialog.setContentView(view);
         dialog.setCanceledOnTouchOutside(false);
@@ -42,7 +43,11 @@ public class VoiceInputDialog {
         });
     }
     public void showDialog() {
-        dialog.show();
+        if(activity != null){
+            activity.runOnUiThread(()->{
+                dialog.show();
+            });
+        }
     }
 
     public void dismissDialog() {
