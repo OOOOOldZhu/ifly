@@ -29,6 +29,7 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import android.widget.*;
 
 /*
  * ：Created by z on 2018/12/05
@@ -39,6 +40,8 @@ public class ifly extends CordovaPlugin {
     private Activity context;
     String TAG = "zhu";
     String respText = "";
+    private InitListener initListener;
+    private RecognizerDialog iatDialog;
 
     @Override
     protected void pluginInitialize() {
@@ -48,8 +51,8 @@ public class ifly extends CordovaPlugin {
         String key = context.getString(getId("app_id", "string"));
         String s = SpeechConstant.APPID + "=" + key;
         SpeechUtility.createUtility(context, s);
-        if (speechRecognizer == null) {
-            speechRecognizer = SpeechRecognizer.createRecognizer(cordova.getActivity(), new InitListener() {
+        if(initListener == null){
+            initListener = new InitListener() {
                 @Override
                 public void onInit(int code) {
                     if (code != ErrorCode.SUCCESS) {
@@ -59,7 +62,10 @@ public class ifly extends CordovaPlugin {
                         Log.d(TAG, "对象初始化成功，状态码" + code);
                     }
                 }
-            });
+            };
+        }
+        if (speechRecognizer == null) {
+            speechRecognizer = SpeechRecognizer.createRecognizer(cordova.getActivity(),initListener);
             Log.i(TAG, "pluginInitialize2222: " + speechRecognizer);
         }
     }
@@ -109,11 +115,122 @@ public class ifly extends CordovaPlugin {
             language = "zh_cn";
         }
         if (isShowDialog) {
-
+//            haveDialog(language);
+            noDialog(language);
         } else {
             // startListenWidthNotDialog(punc);
+            noDialog(language);
         }
         Log.i(TAG, "execute 555: " + speechRecognizer);
+
+    }
+
+    String result = "";
+
+    private void haveDialog(String language){
+        //1.创建SpeechRecognizer对象，第二个参数：本地听写时传InitListener
+//        if (iatDialog == null) {
+//            iatDialog = new RecognizerDialog(cordova.getActivity(), initListener);
+//            //2.设置听写参数，同上节
+//            iatDialog.setParameter(SpeechConstant.DOMAIN, "iat");
+//            //zh_cn en_GB  com.sun.javafx.font  PrismFontFile.java
+//            // http://mscdoc.xfyun.cn/android/api/    中的SpeechRecognizer类
+//            if (language.equalsIgnoreCase("zh_cn")) {
+//                iatDialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+//                iatDialog.setParameter(SpeechConstant.ACCENT, "mandarin ");
+//            } else {
+//                iatDialog.setParameter(SpeechConstant.LANGUAGE, "en_us");
+//                iatDialog.setParameter(SpeechConstant.ACCENT, null);
+//            }
+//            //3.设置回调接口
+//            iatDialog.setListener(new RecognizerDialogListener() {
+//                @Override
+//                public void onResult(RecognizerResult results, boolean isLast) {
+//                    onResult(results, isLast);
+//                }
+//
+//                @Override
+//                public void onError(SpeechError speechError) {
+//                    onError(speechError);
+//                }
+//            });
+//        }
+//        //4.开始听写
+//        try {
+//
+//            iatDialog.show();
+//
+//        } catch (Exception e) {
+//            Log.i(TAG, "haveDialog: " + e);
+//        }
+
+    }
+    private RecognizerListener mRecognizerListener;
+    VoiceInputDialog dialog ;
+    private void noDialog(String language){
+//        if(dialog == null){
+//            dialog = new VoiceInputDialog(cordova.getActivity());
+//        }
+
+//        dialog.setCancelButtonClickListener(new VoiceInputDialog.VoiceInputDialogListener() {
+//            @Override
+//            public void onCancelButtonClick() {
+//                if(speechRecognizer != null){
+//                    speechRecognizer.stopListening();
+//                }
+//                dialog.dismissDialog();
+//            }
+//        });
+        if(mRecognizerListener == null){
+            mRecognizerListener = new RecognizerListener() {
+                @Override
+                public void onBeginOfSpeech() {
+                    // 此回调表示：sdk内部录音机已经准备好了，用户可以开始语音输入
+                    Log.d(TAG, "onBeginOfSpeech 开始说话...");
+                }
+
+                @Override
+                public void onError(SpeechError error) {
+                    if(dialog != null){
+                        dialog.dismissDialog();
+                    }
+                    onError(error);
+                }
+
+                @Override
+                public void onEndOfSpeech() {
+                    if(dialog != null){
+                        dialog.dismissDialog();
+                    }
+                    // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
+                    Log.d(TAG, "onEndOfSpeech() : 说话结束 ");
+                    //speechRecognizer.stopListening();
+                }
+
+                @Override
+                public void onResult(RecognizerResult results, boolean isLast) {
+                    onResult(results,isLast);
+                }
+
+                @Override
+                public void onVolumeChanged(int volume, byte[] data) {
+                    //showTip("当前正在说话，音量大小：" + volume);
+                    if(dialog != null){
+                        dialog.updateVolumeLevel(volume);
+                    }
+                }
+
+                @Override
+                public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
+                    // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
+                    // 若使用本地能力，会话id为null
+                    //	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
+                    //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
+                    //		Log.d(TAG, "session id =" + sid);
+                    //	}
+                }
+            };
+        }
         if (speechRecognizer != null) {
             Log.i(TAG, "execute 666: " + speechRecognizer);
             try {
@@ -128,92 +245,62 @@ public class ifly extends CordovaPlugin {
                     speechRecognizer.setParameter(SpeechConstant.LANGUAGE, "en_us");
                     speechRecognizer.setParameter(SpeechConstant.ACCENT, null);
                 }
-                speechRecognizer.startListening(mRecognizerListener);
+                cordova.getActivity().runOnUiThread(()->{
+//                    dialog.showDialog();
+//                    Toast.makeText(cordova.getActivity(), "开始了。。。", Toast.LENGTH_SHORT).show();
+                });
 
+                speechRecognizer.startListening(mRecognizerListener);
             } catch (Exception e) {
                 Log.i(TAG, "initRecognizer: " + e);
             }
         }
     }
-    String result = "";
-    private RecognizerListener mRecognizerListener = new RecognizerListener() {
-        @Override
-        public void onBeginOfSpeech() {
-            // 此回调表示：sdk内部录音机已经准备好了，用户可以开始语音输入
-            Log.d(TAG, "onBeginOfSpeech 开始说话...");
-        }
 
-        @Override
-        public void onError(SpeechError error) {
-            try {
-                error.getHtmlDescription(true);
-                Log.d(TAG, "语音识别onError() :" + error.getErrorCode() + "  " + error.getErrorDescription());
-                if (error.getErrorCode() == 10118) {
-                    String errStr = error.getErrorDescription();
-                    callbackContext.error(errStr);
-                } else {
-                    String errStr = error.getErrorDescription();
-                    callbackContext.error(errStr);
-                }
+    private void onResult(RecognizerResult results, boolean isLast){
+        try {
+            String json = results.getResultString();
+            result += JsonParser.parseIatResult(json);
+            if (result.equals(".") || result.equals("。") || result.equals("？") || result.equals("") || result.equals(" ") || result.equals("  ")) {
+                return;
+            } else {
+                //respText += text;
+            }
+            if (isLast) {
+                Log.d(TAG, "onResult()最后一次 : " + results.getResultString());
                 speechRecognizer.stopListening();
-                // Tips：
-                // 错误码：10118(您没有说话)，可能是录音机权限被禁，需要提示用户打开应用的录音权限。
-                // 如果使用本地功能（语记）需要提示用户开启语记的录音权限。
+                callbackContext.success(result);
+                //清空识别结果
+                result = "";
+            }
+        } catch (Exception e) {
+            Log.i(TAG, "害羞小强返回结果的异常 : " + e);
+            callbackContext.error(e.getMessage());
+        }
+    }
+    private void onError(SpeechError error){
+        try {
+            error.getHtmlDescription(true);
+            Log.d(TAG, "语音识别onError() :" + error.getErrorCode() + "  " + error.getErrorDescription());
+            if (error.getErrorCode() == 10118) {
+                String errStr = error.getErrorDescription();
+                callbackContext.error(errStr);
+            } else {
+                String errStr = error.getErrorDescription();
+                callbackContext.error(errStr);
+            }
+            speechRecognizer.stopListening();
+            // Tips：
+            // 错误码：10118(您没有说话)，可能是录音机权限被禁，需要提示用户打开应用的录音权限。
+            // 如果使用本地功能（语记）需要提示用户开启语记的录音权限。
 //                btn.setImageResource(R.mipmap.voice_button_normal);
-                //抬起 ，关闭动画
+            //抬起 ，关闭动画
 //                if (rippleBackground.isRippleAnimationRunning()) {
 //                    rippleBackground.stopRippleAnimation();
 //                }
-            } catch (Exception e) {
-                Log.i(TAG, "害羞小强onError()异常 : " + e);
-                callbackContext.error(e.getMessage());
-            }
+        } catch (Exception e) {
+            Log.i(TAG, "害羞小强onError()异常 : " + e);
+            callbackContext.error(e.getMessage());
         }
-
-        @Override
-        public void onEndOfSpeech() {
-            // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
-            Log.d(TAG, "onEndOfSpeech() : 说话结束 ");
-            //speechRecognizer.stopListening();
-        }
-
-        @Override
-        public void onResult(RecognizerResult results, boolean isLast) {
-            try {
-                String json = results.getResultString();
-                result += JsonParser.parseIatResult(json);
-                if (result.equals(".") || result.equals("。") || result.equals("？") || result.equals("") || result.equals(" ") || result.equals("  ")) {
-                    return;
-                } else {
-                    //respText += text;
-                }
-                if (isLast) {
-                    Log.d(TAG, "onResult()最后一次 : " + results.getResultString());
-                    speechRecognizer.stopListening();
-                    callbackContext.success(result);
-                     //清空识别结果
-                    result = "";
-                }
-            } catch (Exception e) {
-                Log.i(TAG, "害羞小强返回结果的异常 : " + e);
-                callbackContext.error(e.getMessage());
-            }
-        }
-
-        @Override
-        public void onVolumeChanged(int volume, byte[] data) {
-            //dialog.updateVolumeLevel(volume);
-            //showTip("当前正在说话，音量大小：" + volume);
-        }
-
-        @Override
-        public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-            // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
-            // 若使用本地能力，会话id为null
-            //	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
-            //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
-            //		Log.d(TAG, "session id =" + sid);
-            //	}
-        }
-    };
+    }
 }

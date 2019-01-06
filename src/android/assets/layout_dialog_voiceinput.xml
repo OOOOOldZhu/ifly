@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#999999">
+
+    <RelativeLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#999999">
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="正在识别中..."
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+        <LinearLayout
+            android:id="@+id/center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/mic2x" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/v6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/v6_2x"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/v5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:src="@mipmap/v5_2x"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/v4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:src="@mipmap/v4_2x"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/v3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:src="@mipmap/v3_2x"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/v2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:src="@mipmap/v2_2x"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/v1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:src="@mipmap/v1_2x" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/bottomtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:lines="2"
+            android:text="请确认麦克风可以正常使用，请保持网络接入畅通、稳定，在安静环境下使用效果更佳."
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
+        <Button
+            android:id="@+id/cacel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bottomtv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="#b36666"
+            android:text="取消识别"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+</FrameLayout>
