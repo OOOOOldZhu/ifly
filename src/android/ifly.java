@@ -191,6 +191,8 @@ public class ifly extends CordovaPlugin {
                     Log.d(TAG, "onResult()最后一次 : " + results.getResultString());
                     speechRecognizer.stopListening();
                     callbackContext.success(result);
+                     //清空识别结果
+                    result = "";
                 }
             } catch (Exception e) {
                 Log.i(TAG, "害羞小强返回结果的异常 : " + e);
