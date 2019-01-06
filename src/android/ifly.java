@@ -3,6 +3,9 @@ package com.microduino.mDesigner;
 import org.apache.cordova.CordovaPlugin;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +42,7 @@ public class ifly extends CordovaPlugin {
     private Activity context;
     String TAG = "zhu";
     String respText = "";
+    private Dialog dialog;
 
     @Override
     protected void pluginInitialize() {
@@ -128,11 +132,29 @@ public class ifly extends CordovaPlugin {
                     speechRecognizer.setParameter(SpeechConstant.LANGUAGE, "en_us");
                     speechRecognizer.setParameter(SpeechConstant.ACCENT, null);
                 }
+                showDialog();
                 speechRecognizer.startListening(mRecognizerListener);
 
             } catch (Exception e) {
                 Log.i(TAG, "initRecognizer: " + e);
             }
+        }
+    }
+    private void showDialog(){
+        if(dialog == null){
+            dialog = new Dialog(cordova.getActivity());
+//                LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.dialog_exit, null);
+        }
+        if(dialog != null){
+            if(dialog.isShowing())return;
+            dialog.show();
+        }
+
+    }
+    private  void dismissDialog(){
+        if(dialog != null && dialog.isShowing()){
+            dialog.dismiss();
         }
     }
     String result = "";
@@ -146,6 +168,7 @@ public class ifly extends CordovaPlugin {
         @Override
         public void onError(SpeechError error) {
             try {
+                dismissDialog();
                 error.getHtmlDescription(true);
                 Log.d(TAG, "语音识别onError() :" + error.getErrorCode() + "  " + error.getErrorDescription());
                 if (error.getErrorCode() == 10118) {
@@ -172,6 +195,7 @@ public class ifly extends CordovaPlugin {
 
         @Override
         public void onEndOfSpeech() {
+            dismissDialog();
             // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
             Log.d(TAG, "onEndOfSpeech() : 说话结束 ");
             //speechRecognizer.stopListening();
