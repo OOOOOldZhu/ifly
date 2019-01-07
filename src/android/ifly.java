@@ -148,7 +148,7 @@ public class ifly extends CordovaPlugin {
 
     private void showDialog() {
         if (dialog == null) {
-            dialog = new Dialog(cordova.getActivity());
+            dialog = new Dialog(cordova.getActivity(),R.style.BuildDialog);
             LayoutInflater inflater = LayoutInflater.from(cordova.getActivity());
             View view = inflater.inflate(R.layout.layout_dialog_voiceinput, null);
             dialog.setContentView(view);
