@@ -10,9 +10,12 @@
                 <param name="android-package" value="com.microduino.mDesigner.ifly"/>
             </feature>
         </config-file>
+
         <source-file src="src/android/ifly.java" target-dir="src/com/microduino/mDesigner" />
         <source-file src="src/android/JsonParser.java" target-dir="src/com/microduino/mDesigner" />
-        <source-file src="src/android/VoiceInputDialog.java" target-dir="src/com/microduino/mDesigner" />
+        <source-file src="src/android/layout_dialog_voiceinput.xml" target-dir="res/layout" />
+        <source-file src="src/android/styles.xml" target-dir="res/values" />
+        <source-file src="src/android/voice_empty.png" target-dir="res/drawable-land-xhdpi" />
         <!--两个jar包-->
         <lib-file src="src/android/sdk/libs/Msc.jar" />
         <lib-file src="src/android/sdk/libs/Sunflower.jar" />
@@ -24,17 +27,6 @@
         <source-file src="src/android/sdk/jniLibs/mips64/libmsc.so" target-dir="src/main/jniLibs/mips64" />
         <source-file src="src/android/sdk/jniLibs/x86/libmsc.so" target-dir="src/main/jniLibs/x86" />
         <source-file src="src/android/sdk/jniLibs/x86_64/libmsc.so" target-dir="src/main/jniLibs/x86_64" />
-
-        <!--自定义的语音弹窗-->
-        <source-file src="src/android/assets/layout_dialog_voiceinput.xml" target-dir="res/layout"/>
-        <source-file src="src/android/assets/styles.xml" target-dir="res/values"/>
-        <source-file src="src/android/assets/mic2x.png" target-dir="res/mipmap-xxhdpi"/>
-        <source-file src="src/android/assets/v1_2x.png" target-dir="res/mipmap-xxhdpi"/>
-        <source-file src="src/android/assets/v2_2x.png" target-dir="res/mipmap-xxhdpi"/>
-        <source-file src="src/android/assets/v3_2x.png" target-dir="res/mipmap-xxhdpi"/>
-        <source-file src="src/android/assets/v4_2x.png" target-dir="res/mipmap-xxhdpi"/>
-        <source-file src="src/android/assets/v5_2x.png" target-dir="res/mipmap-xxhdpi"/>
-        <source-file src="src/android/assets/v6_2x.png" target-dir="res/mipmap-xxhdpi"/>
 
         <config-file target="AndroidManifest.xml" parent="/manifest">
             <!--<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>-->
