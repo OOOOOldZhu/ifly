@@ -12,6 +12,7 @@
         </config-file>
         <source-file src="src/android/ifly.java" target-dir="src/com/microduino/mDesigner" />
         <source-file src="src/android/JsonParser.java" target-dir="src/com/microduino/mDesigner" />
+        <source-file src="src/android/layout_dialog_voiceinput.xml" target-dir="res/layout" />
         <!--两个jar包-->
         <lib-file src="src/android/sdk/libs/Msc.jar" />
         <lib-file src="src/android/sdk/libs/Sunflower.jar" />

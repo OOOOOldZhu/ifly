@@ -11,8 +11,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.iflytek.cloud.ErrorCode;
@@ -145,10 +148,26 @@ public class ifly extends CordovaPlugin {
 
     private void showDialog() {
         if (dialog == null) {
-            dialog = new Dialog(cordova.getActivity(), R.style.VoiceDialog);
+            dialog = new Dialog(cordova.getActivity());
             LayoutInflater inflater = LayoutInflater.from(cordova.getActivity());
             View view = inflater.inflate(R.layout.layout_dialog_voiceinput, null);
             dialog.setContentView(view);
+            dialog.setCanceledOnTouchOutside(false);
+
+            Window window = dialog.getWindow();
+            window.setGravity(Gravity.CENTER); //可设置dialog的位置
+//            window.setBackgroundDrawable();
+            window.getDecorView().setPadding(0, 0, 0, 0); //消除边距
+
+            //设置去除dialog中的系统状态栏
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+            // window.setWindowAnimations(R.style.dialog_anima);
+
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;   //设置宽度充满屏幕
+            layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+            window.setAttributes(layoutParams);
         }
         if (dialog != null) {
             if (dialog.isShowing()) return;
