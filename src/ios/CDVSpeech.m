@@ -87,6 +87,7 @@
         self.iflyRecognizerView = [[IFlyRecognizerView alloc] initWithCenter:keyWindow.center];
         self.iflyRecognizerView.delegate = self;
         [self.iflyRecognizerView setParameter: @"iat" forKey: [IFlySpeechConstant IFLY_DOMAIN]];
+        [self.iflyRecognizerView setParameter:[command.arguments objectAtIndex:2] forKey:@"language"];
         //asr_audio_path保存录音文件名，如不再需要，设置value为nil表示取消，默认目录是documents
         [self.iflyRecognizerView setParameter:@"asrview.pcm " forKey:[IFlySpeechConstant ASR_AUDIO_PATH]];
         if ([isShowPunc isEqualToString:@"0"]) {
